@@ -2,6 +2,10 @@
 .packages
 pubspec.lock
 
+# The .vscode folder contains settings.json that may include flutterSdkPath
+# which depends of developer's platform (Linux/Windows/Mac OS) and preferences.
+.vscode/settings.json
+
 .bundle
 _site
 
