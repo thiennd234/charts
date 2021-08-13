@@ -117,6 +117,11 @@ class ArcLabelDecorator<D> extends ArcRendererDecorator<D> {
       _previousOutsideLabelY = null;
       _previousLabelLeftOfChart = null;
 
+      arcElements.arcs.sort((l, r) {
+        final lArc = (l.endAngle - l.startAngle).abs();
+        final rArc = (r.endAngle - r.startAngle).abs();
+        return lArc < rArc ? 1 : lArc > rArc ? -1 : 0;
+      });
       for (var element in arcElements.arcs) {
         final labelFn = element.series.labelAccessorFn;
         final datumIndex = element.index;
