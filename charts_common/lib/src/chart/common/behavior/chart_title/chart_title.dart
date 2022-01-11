@@ -398,13 +398,8 @@ class _ChartTitleLayoutView<D> extends LayoutView {
         break;
 
       case BehaviorPosition.inside:
-        preferredWidth = _drawAreaBounds != null
-            ? min(_drawAreaBounds.width, maxWidth)
-            : maxWidth;
-
-        preferredHeight = _drawAreaBounds != null
-            ? min(_drawAreaBounds.height, maxHeight)
-            : maxHeight;
+        preferredWidth = min(_drawAreaBounds.width, maxWidth);
+        preferredHeight = min(_drawAreaBounds.height, maxHeight);
         break;
     }
 
@@ -435,7 +430,7 @@ class _ChartTitleLayoutView<D> extends LayoutView {
     var subTitleHeight = 0.0;
 
     // First, measure the height of the title and sub-title.
-    if (_config.title != null) {
+    if (_config.title.isNotEmpty) {
       // Chart titles do not animate. As an optimization for Flutter, cache the
       // [TextElement] to avoid an expensive painter layout operation on
       // subsequent animation frames.
@@ -488,7 +483,7 @@ class _ChartTitleLayoutView<D> extends LayoutView {
     }
 
     // Draw a title if the text is not empty.
-    if (_config.title != null) {
+    if (_config.title.isNotEmpty) {
       final labelPoint = _getLabelPosition(
           true,
           _componentBounds,

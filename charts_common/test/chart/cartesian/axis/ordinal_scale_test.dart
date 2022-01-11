@@ -121,10 +121,6 @@ void main() {
           throwsArgumentError);
     });
 
-    test('set to null throws argument exception', () {
-      expect(() => scale.rangeBandConfig = null, throwsArgumentError);
-    });
-
     test('range band size used from style', () {
       var oldStyle = StyleFactory.style;
       StyleFactory.style = TestStyle()..rangeBandSize = 0.4;

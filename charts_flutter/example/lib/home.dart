@@ -50,13 +50,12 @@ class Home extends StatelessWidget {
   final i18nGalleries = i18n.buildGallery();
   final legendsGalleries = legends.buildGallery();
 
-  Home(
-      {Key? key,
-      this.showPerformanceOverlay = false,
-      required this.onShowPerformanceOverlayChanged})
-      : super(key: key) {
-    assert(onShowPerformanceOverlayChanged != null);
-  }
+  Home({
+    final Key? key,
+    this.showPerformanceOverlay = false,
+    required this.onShowPerformanceOverlayChanged}
+  )
+  : super(key: key);
 
   @override
   Widget build(BuildContext context) {
