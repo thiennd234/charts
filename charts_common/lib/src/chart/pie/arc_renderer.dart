@@ -29,7 +29,7 @@ import 'arc_renderer_element.dart'
 import 'base_arc_renderer.dart';
 
 const arcElementsKey =
-    AttributeKey<List<ArcRendererElement<Object>>>('ArcRenderer.elements');
+    AttributeKey<List<ArcRendererElement<dynamic>>>('ArcRenderer.elements');
 
 class ArcRenderer<D> extends BaseArcRenderer<D> {
   final ArcRendererConfig<D> config;
@@ -208,7 +208,7 @@ class ArcRenderer<D> extends BaseArcRenderer<D> {
         var previousEndAngle = config.startAngle;
 
         for (var arcIndex = 0; arcIndex < series.data.length; arcIndex++) {
-          final Object? datum = series.data[arcIndex];
+          final datum = series.data[arcIndex];
           final details = elementsList[arcIndex];
           final domainValue = details.domain;
 

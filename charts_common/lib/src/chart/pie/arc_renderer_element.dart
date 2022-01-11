@@ -105,7 +105,7 @@ class AnimatedArcList<D> {
 @protected
 class AnimatedArc<D> {
   final String key;
-  Object? datum;
+  dynamic datum;
   D? domain;
 
   ArcRendererElement<D>? _previousArc;
