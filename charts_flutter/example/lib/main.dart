@@ -22,7 +22,7 @@ class GalleryApp extends StatefulWidget {
   GalleryApp({Key? key}) : super(key: key);
 
   @override
-  GalleryAppState createState() => new GalleryAppState();
+  GalleryAppState createState() => GalleryAppState();
 }
 
 /// The main gallery app state.
@@ -34,21 +34,22 @@ class GalleryAppState extends State<GalleryApp> {
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-        title: defaultConfig.appName,
-        theme: defaultConfig.theme,
+    return MaterialApp(
+      title: defaultConfig.appName,
+      theme: defaultConfig.theme,
+      showPerformanceOverlay: _showPerformanceOverlay,
+      home: Home(
         showPerformanceOverlay: _showPerformanceOverlay,
-        home: new Home(
-          showPerformanceOverlay: _showPerformanceOverlay,
-          onShowPerformanceOverlayChanged: (bool value) {
-            setState(() {
-              _showPerformanceOverlay = value;
-            });
-          },
-        ));
+        onShowPerformanceOverlayChanged: (bool value) {
+          setState(() {
+            _showPerformanceOverlay = value;
+          });
+        },
+      )
+    );
   }
 }
 
 void main() {
-  runApp(new GalleryApp());
+  runApp(GalleryApp());
 }
