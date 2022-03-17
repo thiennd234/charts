@@ -55,12 +55,15 @@ class _GalleryScaffoldState extends State<GalleryScaffold> {
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
       body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(children: <Widget>[
-            SizedBox(height: 250.0, child: widget.childBuilder()),
-          ])),
+        padding: const EdgeInsets.all(8.0),
+        child: Column(children: [
+          SizedBox(height: 300.0, child: widget.childBuilder()),
+        ])
+      ),
       floatingActionButton: FloatingActionButton(
-          onPressed: _handleButtonPress, child: Icon(Icons.refresh)),
+        child: Icon(Icons.refresh),
+        onPressed: _handleButtonPress,
+      ),
     );
   }
 }

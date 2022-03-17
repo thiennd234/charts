@@ -95,10 +95,13 @@ class OrdinalInitialViewport extends StatelessWidget {
       // Set the initial viewport by providing a AxisSpec with the
       // desired viewport: a starting domain and the data size.
       domainAxis: charts.OrdinalAxisSpec(
-          viewport: charts.OrdinalViewport('2018', 4)),
+        viewport: charts.OrdinalViewport('2018', 4),
+      ),
       // Optionally add a pan or pan and zoom behavior.
       // If pan/zoom is not added, the viewport specified remains the viewport.
-      behaviors: [charts.PanAndZoomBehavior()],
+      behaviors: [
+        charts.PanAndZoomBehavior(),
+      ],
     );
   }
 

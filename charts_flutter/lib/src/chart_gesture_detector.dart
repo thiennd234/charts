@@ -15,16 +15,24 @@
 
 import 'dart:async' show Timer;
 import 'dart:math' show Point;
+
+import 'package:flutter/gestures.dart'
+  show
+    DeviceGestureSettings,
+    ScaleGestureRecognizer,
+    TapGestureRecognizer;
 import 'package:flutter/material.dart'
-    show
-        BuildContext,
-        GestureDetector,
-        RenderBox,
-        ScaleEndDetails,
-        ScaleStartDetails,
-        ScaleUpdateDetails,
-        TapDownDetails,
-        TapUpDetails;
+  show
+    BuildContext,
+    GestureRecognizerFactory,
+    GestureRecognizerFactoryWithHandlers,
+    RawGestureDetector,
+    RenderBox,
+    ScaleEndDetails,
+    ScaleStartDetails,
+    ScaleUpdateDetails,
+    TapDownDetails,
+    TapUpDetails;
 
 import 'behaviors/chart_behavior.dart' show GestureType;
 import 'chart_container.dart' show ChartContainer, ChartContainerRenderObject;
@@ -56,19 +64,47 @@ class ChartGestureDetector {
     final wantTap = desiredGestures.contains(GestureType.onTap);
     final wantDrag = desiredGestures.contains(GestureType.onDrag);
 
+    final gestures = <Type, GestureRecognizerFactory>{};
+    if (wantTapDown || wantTap) {
+      gestures[TapGestureRecognizer] = GestureRecognizerFactoryWithHandlers<TapGestureRecognizer>(
+        () => TapGestureRecognizer(debugOwner: this),
+        (TapGestureRecognizer instance) {
+          instance
+            ..onTapDown = wantTapDown ? onTapDown : null
+            ..onTapUp = wantTap ? onTapUp : null;
+        },
+      );
+    }
+    if (wantDrag) {
+      gestures[ScaleGestureRecognizer] = GestureRecognizerFactoryWithHandlers<ScaleGestureRecognizer>(
+        () => ScaleGestureRecognizer(debugOwner: this),
+        (ScaleGestureRecognizer instance) {
+          instance
+            ..onStart = onScaleStart
+            ..onUpdate = onScaleUpdate
+            ..onEnd = onScaleEnd
+            // We set here [touchSlop] twice less then normal value for
+            // [DragGestureRecognizer] to make [panSlop] equal to this value
+            // because [panSlop] calculates as double [touchSlop]. This setting
+            // makes the priority of [ScaleGestureRecognizer] equal to the
+            // priority of [DragGestureRecognizer] on the arena. So if we place
+            // the chart into a [Scrollable], the chart will have higher
+            // priority than [Scrollable] like if the chart has
+            // [DragGestureRecognizer].
+            ..gestureSettings = DeviceGestureSettings(touchSlop: 9);
+        },
+      );
+    }
+
     // LongPress is special, we'd like to be able to trigger long press before
     // Drag/Press to trigger tooltips then explore with them. This means we
     // can't rely on gesture detection since it will block out the scale
     // gestures.
     _listeningForLongPress = desiredGestures.contains(GestureType.onLongPress);
 
-    return new GestureDetector(
+    return RawGestureDetector(
+      gestures: gestures,
       child: chartContainer,
-      onTapDown: wantTapDown ? onTapDown : null,
-      onTapUp: wantTap ? onTapUp : null,
-      onScaleStart: wantDrag ? onScaleStart : null,
-      onScaleUpdate: wantDrag ? onScaleUpdate : null,
-      onScaleEnd: wantDrag ? onScaleEnd : null,
     );
   }
 
@@ -120,7 +156,6 @@ class ChartGestureDetector {
     final localPosition = container.globalToLocal(d.focalPoint);
     _lastTapPoint = new Point(localPosition.dx, localPosition.dy);
     _lastScale = d.scale;
-
     container.gestureProxy.onDragUpdate(_lastTapPoint!, d.scale);
   }
 
