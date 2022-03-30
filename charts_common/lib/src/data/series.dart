@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import '../chart/bar/bar_label_decorator.dart';
 import '../chart/cartesian/axis/spec/axis_spec.dart' show TextStyleSpec;
 import '../chart/common/chart_canvas.dart' show FillPatternType;
 import '../chart/common/datum_details.dart'
@@ -98,6 +99,8 @@ class Series<T, D> {
   final AccessorFn<String>? labelAccessorFn;
   final AccessorFn<TextStyleSpec>? insideLabelStyleAccessorFn;
   final AccessorFn<TextStyleSpec>? outsideLabelStyleAccessorFn;
+  final AccessorFn<BarLabelPosition>? labelPositionAccessorFn;
+  final AccessorFn<BarLabelAnchor>? labelAnchorAccessorFn;
 
   // TODO: should this be immutable as well? If not, should any of
   // the non-required ones be final?
@@ -123,6 +126,8 @@ class Series<T, D> {
       TypedAccessorFn<T, String>? labelAccessorFn,
       TypedAccessorFn<T, TextStyleSpec>? insideLabelStyleAccessorFn,
       TypedAccessorFn<T, TextStyleSpec>? outsideLabelStyleAccessorFn,
+      TypedAccessorFn<T, BarLabelPosition>? labelPositionAccessorFn,
+      TypedAccessorFn<T, BarLabelAnchor>? labelAnchorAccessorFn,
       TypedAccessorFn<T, MeasureFormatter>? measureFormatterFn,
       TypedAccessorFn<T, num?>? measureLowerBoundFn,
       TypedAccessorFn<T, num?>? measureUpperBoundFn,
@@ -169,6 +174,12 @@ class Series<T, D> {
     final _outsideLabelStyleAccessorFn = outsideLabelStyleAccessorFn == null
         ? null
         : (int? index) => outsideLabelStyleAccessorFn(data[index!], index);
+    final _labelPositionAccessorFn = labelPositionAccessorFn == null
+        ? null
+        : (int? index) => labelPositionAccessorFn(data[index!], index);
+    final _labelAnchorAccessorFn = labelAnchorAccessorFn == null
+        ? null
+        : (int? index) => labelAnchorAccessorFn(data[index!], index);
     final _measureFormatterFn = measureFormatterFn == null
         ? null
         : (int? index) => measureFormatterFn(data[index!], index);
@@ -209,6 +220,8 @@ class Series<T, D> {
       labelAccessorFn: _labelAccessorFn,
       insideLabelStyleAccessorFn: _insideLabelStyleAccessorFn,
       outsideLabelStyleAccessorFn: _outsideLabelStyleAccessorFn,
+      labelPositionAccessorFn: _labelPositionAccessorFn,
+      labelAnchorAccessorFn: _labelAnchorAccessorFn,
       measureFormatterFn: _measureFormatterFn,
       measureLowerBoundFn: _measureLowerBoundFn,
       measureUpperBoundFn: _measureUpperBoundFn,
@@ -240,6 +253,8 @@ class Series<T, D> {
     required this.labelAccessorFn,
     required this.insideLabelStyleAccessorFn,
     required this.outsideLabelStyleAccessorFn,
+    required this.labelPositionAccessorFn,
+    required this.labelAnchorAccessorFn,
     required this.measureFormatterFn,
     required this.measureLowerBoundFn,
     required this.measureUpperBoundFn,

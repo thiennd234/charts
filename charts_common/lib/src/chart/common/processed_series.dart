@@ -14,6 +14,7 @@
 // limitations under the License.
 
 import '../../common/color.dart' show Color;
+import '../bar/bar_label_decorator.dart';
 import 'datum_details.dart' show DomainFormatter, MeasureFormatter;
 import '../../data/series.dart'
     show AccessorFn, Series, SeriesAttributes, AttributeKey;
@@ -117,6 +118,12 @@ class MutableSeries<D> extends ImmutableSeries<D> {
   @override
   AccessorFn<TextStyleSpec>? outsideLabelStyleAccessorFn;
 
+  @override
+  AccessorFn<BarLabelPosition>? labelPositionAccessorFn;
+
+  @override
+  AccessorFn<BarLabelAnchor>? labelAnchorAccessorFn;
+
   final _attrs = SeriesAttributes();
 
   Axis<num>? measureAxis;
@@ -152,6 +159,8 @@ class MutableSeries<D> extends ImmutableSeries<D> {
         patternColorFn = series.patternColorFn,
         insideLabelStyleAccessorFn = series.insideLabelStyleAccessorFn,
         outsideLabelStyleAccessorFn = series.outsideLabelStyleAccessorFn,
+        labelPositionAccessorFn = series.labelPositionAccessorFn,
+        labelAnchorAccessorFn = series.labelAnchorAccessorFn,
         radiusPxFn = series.radiusPxFn,
         strokeWidthPxFn = series.strokeWidthPxFn {
     // Pre-compute the sum of the measure values to make it available on demand.
@@ -199,6 +208,8 @@ class MutableSeries<D> extends ImmutableSeries<D> {
         labelAccessorFn = other.labelAccessorFn,
         insideLabelStyleAccessorFn = other.insideLabelStyleAccessorFn,
         outsideLabelStyleAccessorFn = other.outsideLabelStyleAccessorFn,
+        labelPositionAccessorFn = other.labelPositionAccessorFn,
+        labelAnchorAccessorFn = other.labelAnchorAccessorFn,
         radiusPxFn = other.radiusPxFn,
         strokeWidthPxFn = other.strokeWidthPxFn,
         measureAxis = other.measureAxis,
@@ -299,8 +310,11 @@ abstract class ImmutableSeries<D> {
 
   AccessorFn<String>? get labelAccessorFn;
 
-  AccessorFn<TextStyleSpec>? insideLabelStyleAccessorFn;
-  AccessorFn<TextStyleSpec>? outsideLabelStyleAccessorFn;
+  AccessorFn<TextStyleSpec>? get insideLabelStyleAccessorFn;
+  AccessorFn<TextStyleSpec>? get outsideLabelStyleAccessorFn;
+
+  AccessorFn<BarLabelPosition>? get labelPositionAccessorFn;
+  AccessorFn<BarLabelAnchor>? get labelAnchorAccessorFn;
 
   AccessorFn<num?>? get radiusPxFn;
 

@@ -142,7 +142,9 @@ class BarLabelDecorator<D> extends BarRendererDecorator<D> {
       final totalPadding = labelPadding * 2;
       final insideBarHeight = bounds.height - totalPadding;
 
-      var calculatedLabelPosition = labelPosition;
+      var calculatedLabelPosition =
+        element.series!.labelPositionAccessorFn?.call(datumIndex)
+          ?? labelPosition;
       if (calculatedLabelPosition == BarLabelPosition.auto) {
         // For auto, first try to fit the text inside the bar.
         labelElements = labelElements.map(
@@ -180,11 +182,15 @@ class BarLabelDecorator<D> extends BarRendererDecorator<D> {
         final int labelY;
         final labelHeight = labelElement.measurement.verticalSliceWidth.round();
         final offsetHeight =
-            (labelHeight + _defaultMultiLineLabelPadding) * labelsDrawn;
+          (labelHeight + _defaultMultiLineLabelPadding) * labelsDrawn;
 
         if (calculatedLabelPosition == BarLabelPosition.inside) {
           final anchor = _resolveLabelAnchor(
-              measure, labelAnchor ?? _defaultVerticalLabelAnchor);
+            measure,
+            element.series!.labelAnchorAccessorFn?.call(datumIndex)
+              ?? labelAnchor
+              ?? _defaultVerticalLabelAnchor
+          );
           switch (anchor) {
             case BarLabelAnchor.end:
               labelY = bounds.top + labelPadding + offsetHeight;
