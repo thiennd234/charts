@@ -20,12 +20,14 @@ import 'package:flutter/gestures.dart'
   show
     DeviceGestureSettings,
     ScaleGestureRecognizer,
-    TapGestureRecognizer;
+    TapGestureRecognizer,
+    kTouchSlop;
 import 'package:flutter/material.dart'
   show
     BuildContext,
     GestureRecognizerFactory,
     GestureRecognizerFactoryWithHandlers,
+    MediaQuery,
     RawGestureDetector,
     RenderBox,
     ScaleEndDetails,
@@ -76,6 +78,8 @@ class ChartGestureDetector {
       );
     }
     if (wantDrag) {
+      final touchSlop = MediaQuery.of(context).gestureSettings.touchSlop
+        ?? kTouchSlop;
       gestures[ScaleGestureRecognizer] = GestureRecognizerFactoryWithHandlers<ScaleGestureRecognizer>(
         () => ScaleGestureRecognizer(debugOwner: this),
         (ScaleGestureRecognizer instance) {
@@ -91,7 +95,7 @@ class ChartGestureDetector {
             // the chart into a [Scrollable], the chart will have higher
             // priority than [Scrollable] like if the chart has
             // [DragGestureRecognizer].
-            ..gestureSettings = DeviceGestureSettings(touchSlop: 9);
+            ..gestureSettings = DeviceGestureSettings(touchSlop: touchSlop / 2.0);
         },
       );
     }
