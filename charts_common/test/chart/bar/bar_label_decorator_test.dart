@@ -1,5 +1,3 @@
-// @dart=2.9
-
 // Copyright 2018 the Charts project authors. Please see the AUTHORS file
 // for details.
 //
@@ -62,19 +60,19 @@ class FakeGraphicsFactory extends GraphicsFactory {
 /// Stores [TextStyle] properties for test to verify.
 class FakeTextStyle implements TextStyle {
   @override
-  Color color;
+  Color? color;
 
   @override
-  int fontSize;
+  int? fontSize;
 
   @override
-  String fontFamily;
+  String? fontFamily;
 
   @override
-  double lineHeight;
+  double? lineHeight;
 
   @override
-  String fontWeight;
+  String? fontWeight;
 }
 
 /// Fake [TextElement] which returns text length as [horizontalSliceWidth].
@@ -85,26 +83,29 @@ class FakeTextElement implements TextElement {
   final String text;
 
   @override
-  TextStyle textStyle;
+  TextStyle? textStyle;
 
   @override
-  int maxWidth;
+  int? maxWidth;
 
   @override
-  MaxWidthStrategy maxWidthStrategy;
+  MaxWidthStrategy? maxWidthStrategy;
 
   @override
   TextDirection textDirection;
 
-  double opacity;
+  double? opacity;
 
-  FakeTextElement(this.text);
+  FakeTextElement(this.text, {
+    this.textDirection = TextDirection.ltr,
+  });
 
   @override
   TextMeasurement get measurement => TextMeasurement(
-      horizontalSliceWidth: text.length.toDouble(),
-      verticalSliceWidth: textStyle.fontSize.toDouble(),
-      baseline: textStyle.fontSize.toDouble());
+    horizontalSliceWidth: text.length.toDouble(),
+    verticalSliceWidth: textStyle?.fontSize?.toDouble() ?? 0.0,
+    baseline: textStyle?.fontSize?.toDouble() ?? 0.0
+  );
 }
 
 class MockLinePaint extends Mock implements LineStyle {}
@@ -124,24 +125,34 @@ class FakeBarRendererElement implements ImmutableBarRendererElement<String> {
   @override
   int index;
 
-  FakeBarRendererElement(this.datum, this.bounds, this.labelAccessor, this.data,
-      {this.measureFn}) {
-    index = data.indexOf(datum);
+  FakeBarRendererElement(
+    this.datum,
+    this.bounds,
+    this.labelAccessor,
+    this.data, {
+      this.measureFn = _measure,
+    }
+  )
+  : index = data.indexOf(datum)
+  {
     when(_series.labelAccessorFn).thenReturn(labelAccessor);
-    when(_series.measureFn).thenReturn(measureFn ?? (_) => 1.0);
+    when(_series.measureFn).thenReturn(measureFn);
     when(_series.data).thenReturn(data);
   }
 
   @override
   ImmutableSeries<String> get series => _series;
+
+  static num _measure(final int? index) => 1.0;
 }
 
 class MockImmutableSeries<D> extends Mock implements ImmutableSeries<D> {}
 
-void main() {
-  ChartCanvas canvas;
-  GraphicsFactory graphicsFactory;
-  Rectangle<int> drawBounds;
+void main()
+{
+  late ChartCanvas canvas;
+  late GraphicsFactory graphicsFactory;
+  late Rectangle<int> drawBounds;
 
   setUpAll(() {
     canvas = MockCanvas();
