@@ -18,7 +18,7 @@ dependencies:
   #   path: ../charts_common/
   charts_common:
     git:
-      url: git@github.com:darkstarx/charts.git
+      url: git@github.com:thiennd234/charts.git
       path: charts_common
       ref: master
   collection: ^1.17.1
